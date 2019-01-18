@@ -1,0 +1,14 @@
+---
+# tasks file for ansible-common
+
+- name: Add ip addr to hosts file
+  lineinfile:
+    path: /etc/hosts
+    regexp: "^{{ item.ip }}"
+    line: "{{ item.ip}}    {{item.name}}"
+    owner: root
+    group: root
+    mode: 0644
+    unsafe_writes: True
+  when: common_hosts | length > 0
+  with_items: "{{ common_hosts }}"
