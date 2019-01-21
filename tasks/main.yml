@@ -4,7 +4,7 @@
 - name: Add ip addr to hosts file
   lineinfile:
     path: /etc/hosts
-    regexp: "^{{ item.ip }}"
+    regexp: '^{{ item.ip }}\s+'
     line: "{{ item.ip}}    {{item.name}}"
     owner: root
     group: root
