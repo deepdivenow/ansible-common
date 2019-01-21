@@ -12,3 +12,15 @@
     unsafe_writes: True
   when: common_hosts | length > 0
   with_items: "{{ common_hosts }}"
+
+- name: Activate EPEL repo
+  yum:
+    name: epel-release
+    state: present
+  when: common_epel_enable
+
+- name: Install common packages
+  yum:
+    name: "{{ common_packages }}"
+    state: present
+  when: common_packages | length > 0

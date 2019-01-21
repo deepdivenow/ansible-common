@@ -1,3 +1,5 @@
 ---
 # defaults file for ansible-common
 common_hosts: []
+common_epel_enable: False
+common_packages: []
