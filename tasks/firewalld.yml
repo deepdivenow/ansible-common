@@ -1,0 +1,23 @@
+---
+- name: Enable FirewallD
+  service: name=firewalld state=started enabled=True
+
+- name: Set private zone iface
+  firewalld:
+    zone: trusted
+    interface: "{{ item }}"
+    permanent: True
+    immediate: True
+    state: enabled
+  when: "hostvars[inventory_hostname]['ansible_facts'][item]['ipv4']['address'] | ipv4_is_local"
+  with_items: "{{ hostvars[inventory_hostname]['ansible_facts']['interfaces'] }}"
+
+- name: Set public zone iface
+  firewalld:
+    zone: public
+    interface: "{{ item }}"
+    permanent: True
+    immediate: True
+    state: enabled
+  when: "not hostvars[inventory_hostname]['ansible_facts'][item]['ipv4']['address'] | ipv4_is_local"
+  with_items: "{{ hostvars[inventory_hostname]['ansible_facts']['interfaces'] }}"

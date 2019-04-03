@@ -1,6 +1,10 @@
 ---
 # tasks file for ansible-common
 
+- hostname:
+    name: "{{ inventory_hostname }}"
+  when: common_reset_hostname
+
 - name: Add ip addr to hosts file
   lineinfile:
     path: /etc/hosts
@@ -24,3 +28,6 @@
     name: "{{ common_packages }}"
     state: present
   when: common_packages | length > 0
+
+- import_tasks: firewalld.yml
+  when: common_firewalld_enable
