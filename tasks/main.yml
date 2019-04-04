@@ -31,3 +31,6 @@
 
 - import_tasks: firewalld.yml
   when: common_firewalld_enable
+
+- import_tasks: users.yml
+  when: common_users | length > 0

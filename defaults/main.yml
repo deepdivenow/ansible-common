@@ -5,3 +5,4 @@ common_reset_hostname: False
 common_epel_enable: False
 common_packages: []
 common_firewalld_enable: False
+common_users: []

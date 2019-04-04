@@ -21,3 +21,12 @@
     state: enabled
   when: "not hostvars[inventory_hostname]['ansible_facts'][item]['ipv4']['address'] | ipv4_is_local"
   with_items: "{{ hostvars[inventory_hostname]['ansible_facts']['interfaces'] }}"
+
+- name: Allow ports in public zone
+  firewalld:
+    zone: public
+    port: "{{ item }}"
+    permanent: True
+    immediate: True
+    state: enabled
+  with_items: "{{ common_firewalld_allow_ports }}"
