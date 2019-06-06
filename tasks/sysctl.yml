@@ -1,0 +1,9 @@
+---
+- name: Set sysctl
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+    reload: no
+    ignoreerrors: yes
+  with_items: "{{ common_sysctl }}"

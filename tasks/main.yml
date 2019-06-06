@@ -32,5 +32,12 @@
 - import_tasks: firewalld.yml
   when: common_firewalld_enable
 
+- name: Disable FirewallD
+  service: name=firewalld state=stopped enabled=False
+  when: not common_firewalld_enable
+
 - import_tasks: users.yml
   when: common_users | length > 0
+
+- import_tasks: sysctl.yml
+  when: common_sysctl | length > 0
