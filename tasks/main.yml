@@ -5,6 +5,15 @@
     name: "{{ inventory_hostname }}"
   when: common_reset_hostname
 
+- name: Delete subnets from hosts
+  lineinfile:
+    path: /etc/hosts
+    regexp: '^{{ item }}'
+    state: absent
+    unsafe_writes: True
+  when: common_hosts | length > 0
+  with_items: "{{ common_hosts_delete_subnets }}"
+
 - name: Add ip addr to hosts file
   lineinfile:
     path: /etc/hosts

@@ -7,3 +7,4 @@ common_packages: []
 common_firewalld_enable: False
 common_users: []
 common_sysctl: []
+common_hosts_delete_subnets: []
