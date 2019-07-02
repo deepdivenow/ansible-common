@@ -1,0 +1,16 @@
+---
+- name: Register public key "{{ item.from_user }}" @ "{{ item.from_host }}"
+  command: |
+    cat ~/.ssh/id_rsa.pub
+  changed_when: False
+  delegate_to: "{{ item.from_host }}"
+  become_user: "{{ item.from_user }}"
+  register: pubkey
+  when: inventory_hostname == item.to_host
+
+- name: Add key "{{ item.from_user }}" @ "{{ item.from_host }}"
+  authorized_key:
+    user: "{{ item.to_user }}"
+    state: present
+    key: "{{ pubkey.stdout }}"
+  when: inventory_hostname == item.to_host

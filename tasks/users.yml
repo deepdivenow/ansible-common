@@ -1,15 +1,22 @@
 ---
+- name: Add Group
+  group: name="{{ item.group }}"
+  when: item.group is defined
+  with_items: "{{ common_users }}"
+
 - name: Add User
-  user: name={{item.user}} shell="{{item.shell}}"
-  become: true
-  with_items:
-  - "{{ common_users }}"
+  user:
+    name: "{{ item.user }}"
+    shell: "{{ item.shell | default(omit) }}"
+    group: "{{ item.group | default(omit) }}"
+    home: "{{ item.home | default(omit) }}"
+    generate_ssh_key: True
+  with_items: "{{ common_users }}"
 
 - name: Add user keys
-  authorized_key: user={{ item.user }} key="{{ item.key }}"
-  become: true
-  with_items:
-  - "{{ common_users }}"
+  authorized_key: user={{ item.user }} key={{ item.key }}
+  when: item.key is defined
+  with_items: "{{ common_users }}"
 
 - name: Add sudoers
   lineinfile:
@@ -18,7 +25,5 @@
     regexp: "^{{ item.user }} ALL="
     line: "{{ item.user }} ALL=(ALL) NOPASSWD: ALL"
     validate: 'visudo -cf %s'
-  become: true
   when: item.sudo is defined and item.sudo
-  with_items:
-  - "{{ common_users }}"
+  with_items: "{{ common_users }}"
